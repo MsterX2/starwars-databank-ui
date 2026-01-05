@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const images = import.meta.glob("../assets/img/**/*.jpg", { eager: true })
-
+import notFound from "../assets/img/big-placeholder.jpg"
 export const StarWarsCard = ({ title, items, uri, id, endpoint }) => {
     const image = images[`../assets/img/${uri}/${id}.jpg`]?.default;
     const navigate = useNavigate();
@@ -18,7 +18,6 @@ export const StarWarsCard = ({ title, items, uri, id, endpoint }) => {
         setIsLiked(!isLiked);
     };
 
-    console.log(image)
 
     return (
         <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
@@ -27,7 +26,7 @@ export const StarWarsCard = ({ title, items, uri, id, endpoint }) => {
                 onClick={() => handleClick(id, endpoint, uri)}
                 style={{ cursor: 'pointer' }}
             >
-                <img src={image} className="card-img-top" alt={title} />
+                <img src={image || notFound} className="card-img-top" alt={title} />
 
                 {showLike && (
                     <button

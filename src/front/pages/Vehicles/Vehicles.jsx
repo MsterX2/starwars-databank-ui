@@ -9,20 +9,31 @@ export const Vehicles = () => {
     const [searchTerm, setSearchTerm] = useContext(searchContext);
     const [vehiclesData, setVehiclesData] = useState([])
     const [filteredVehicles, setFilteredVehicles] = useState([])
+    const [previous, setPrevious] = useState([])
+    const [next, setNext] = useState([])
 
     const host = "https://www.swapi.tech/api";
     const uri = "vehicles";
 
-    const getData = async () => {
-        const data = await apiRequest(`${host}/${uri}`, "GET");
+    const getData = async (endpoint) => {
+        const data = await apiRequest(endpoint, "GET");
+        if (!data.results) return;
         setVehiclesData(data.results)
+        setPrevious(data.previous)
+        setNext(data.next)
     }
 
-    const handleNext = () => { }
-    const handlePrevious = () => { }
+    const handleNext = () => {
+        console.log(next)
+        if (next) getData(next)
+    }
+    const handlePrevious = () => {
+        console.log(previous)
+        if (previous) getData(previous)
+    }
     useEffect(
         () => {
-            getData()
+            getData(`${host}/${uri}`)
         }, [])
 
     useEffect(

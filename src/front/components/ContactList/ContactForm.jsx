@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useCrudContext } from '../../hooks/useContactsContex.jsx';
+import { useAnimationContext } from '../../hooks/useAnimationContext.jsx';
 
 export const ContactForm = () => {
     const context = useCrudContext();
-
+    const { setAnimatingId,
+        setAnimationType } = useAnimationContext()
     if (!context) {
         throw new Error('ContactForm must be used within ContactContextProvider');
     }
@@ -12,9 +14,7 @@ export const ContactForm = () => {
         editValue,
         setEditValue,
         contacts,
-        setContacts,
-        setAnimatingId,
-        setAnimationType
+        setContacts
     } = context;
 
     const [contactForm, setContactForm] = useState({

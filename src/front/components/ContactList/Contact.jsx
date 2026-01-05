@@ -1,8 +1,11 @@
 import React from 'react';
 import { useCrudContext } from '../../hooks/useContactsContex.jsx';
+import { useAnimationContext } from '../../hooks/useAnimationContext.jsx';
 
 export const Contact = ({ id, name, address, phone, email }) => {
     const context = useCrudContext();
+    const { setAnimatingId,
+        setAnimationType } = useAnimationContext();
 
     if (!context) {
         throw new Error('Contact must be used within ContactContextProvider');
@@ -11,9 +14,7 @@ export const Contact = ({ id, name, address, phone, email }) => {
     const {
         setEditValue,
         contacts,
-        setContacts,
-        setAnimatingId,
-        setAnimationType
+        setContacts
     } = context;
 
     const handleEdit = (e) => {

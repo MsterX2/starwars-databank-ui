@@ -3,12 +3,14 @@ import { Contact } from '../../components/ContactList/Contact.jsx';
 import { ContactForm } from '../../components/ContactList/ContactForm.jsx';
 import { useCrudContext } from '../../hooks/useContactsContex.jsx';
 import { searchContext } from '../Layout.jsx';
+import { useAnimationContext } from '../../hooks/useAnimationContext.jsx';
 
 
 export const ContactList = () => {
 	const context = useCrudContext();
+	const { animatingId,
+		animationType } = useAnimationContext()
 	const [searchTerm, setSearchTerm] = useContext(searchContext);
-
 
 	if (!context) {
 		throw new Error('ContactList must be used within ContactContextProvider');
@@ -16,16 +18,13 @@ export const ContactList = () => {
 
 	const {
 		contacts,
-		setEditValue,
-		animatingId,
-		animationType
+		setEditValue
 	} = context;
 
 	const handleAddNew = () => {
 		setEditValue({ method: "POST" });
 	};
 
-	// Filtrar por término de búsqueda
 	const filteredContacts = contacts.filter(contact =>
 		contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 		contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||

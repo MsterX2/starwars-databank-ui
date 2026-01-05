@@ -37,20 +37,13 @@ export const ContactContextProvider = ({ children }) => {
         }
     ]);
 
-    const [animatingId, setAnimatingId] = useState(null);
-    const [animationType, setAnimationType] = useState(null);
-
     return (
         <crudContext.Provider
             value={{
                 editValue,
                 setEditValue,
                 contacts,
-                setContacts,
-                animatingId,
-                setAnimatingId,
-                animationType,
-                setAnimationType
+                setContacts
             }}
         >
             <singleContactContext.Provider value={{ singleContact, setSingleContact }}>
@@ -66,15 +59,10 @@ export const useCrudContext = () => {
         editValue,
         setEditValue,
         contacts,
-        setContacts,
-        animatingId,
-        setAnimatingId,
-        animationType,
-        setAnimationType
+        setContacts
     } = useContext(crudContext)
     return {
-        editValue, setEditValue, contacts, setContacts, animatingId,
-        setAnimatingId, animationType, setAnimationType
+        editValue, setEditValue, contacts, setContacts
     }
 }
 
