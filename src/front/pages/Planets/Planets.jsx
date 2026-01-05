@@ -1,87 +1,38 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StarWarsCard } from '../../components/StarWarsCard';
 import { searchContext } from '../Layout';
+import { apiRequest } from '../../apiRequest';
+import { useNavigate } from 'react-router-dom';
 
 export const Planets = () => {
     const [searchTerm, setSearchTerm] = useContext(searchContext);
+    const [planetsData, setPlanetsData] = useState([])
+    const [filteredPlanets, setFilteredPlanets] = useState([])
 
-    const planetsData = [
-        {
-            id: 1,
-            title: 'Tatooine',
-            image: 'https://images.unsplash.com/photo-1520034475321-cbe63696469a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYWxheHklMjBzdGFyc3xlbnwxfHx8fDE3NjQ3NDU5MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-            items: [
-                'Tipo: Planeta desértico',
-                'Región: Borde Exterior',
-                'Soles: 2 (binario)',
-                'Población: 200,000 habitantes'
-            ]
-        },
-        {
-            id: 2,
-            title: 'Coruscant',
-            image: 'https://images.unsplash.com/photo-1520034475321-cbe63696469a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYWxheHklMjBzdGFyc3xlbnwxfHx8fDE3NjQ3NDU5MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-            items: [
-                'Tipo: Ecumenópolis (ciudad planeta)',
-                'Región: Mundos del Núcleo',
-                'Capital: República/Imperio Galáctico',
-                'Población: 1 billón de habitantes'
-            ]
-        },
-        {
-            id: 3,
-            title: 'Hoth',
-            image: 'https://images.unsplash.com/photo-1520034475321-cbe63696469a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYWxheHklMjBzdGFyc3xlbnwxfHx8fDE3NjQ3NDU5MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-            items: [
-                'Tipo: Planeta helado',
-                'Región: Borde Exterior',
-                'Clima: Temperaturas bajo cero',
-                'Base: Echo Base (Alianza Rebelde)'
-            ]
-        },
-        {
-            id: 4,
-            title: 'Endor',
-            image: 'https://images.unsplash.com/photo-1520034475321-cbe63696469a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYWxheHklMjBzdGFyc3xlbnwxfHx8fDE3NjQ3NDU5MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-            items: [
-                'Tipo: Luna boscosa',
-                'Región: Territorios del Borde Exterior',
-                'Habitantes nativos: Ewoks',
-                'Terreno: Bosques densos'
-            ]
-        },
-        {
-            id: 5,
-            title: 'Naboo',
-            image: 'https://images.unsplash.com/photo-1520034475321-cbe63696469a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYWxheHklMjBzdGFyc3xlbnwxfHx8fDE3NjQ3NDU5MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-            items: [
-                'Tipo: Planeta templado',
-                'Región: Borde Medio',
-                'Habitantes: Humanos y Gungans',
-                'Característica: Planeta natal de Padmé'
-            ]
-        },
-        {
-            id: 6,
-            title: 'Dagobah',
-            image: 'https://images.unsplash.com/photo-1520034475321-cbe63696469a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYWxheHklMjBzdGFyc3xlbnwxfHx8fDE3NjQ3NDU5MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-            items: [
-                'Tipo: Planeta pantanoso',
-                'Región: Borde Exterior',
-                'Clima: Húmedo y neblinoso',
-                'Habitante notable: Maestro Yoda'
-            ]
-        }
-    ];
+    const host = "https://www.swapi.tech/api";
+    const uri = "planets"
 
-    const handlePlanetClick = (id, title) => {
-        console.log(`Planet clicked: ${title} (ID: ${id})`);
-    };
+    const getData = async () => {
+        const data = await apiRequest(`${host}/${uri}`, "GET");
+        setPlanetsData(data.results)
+    }
 
-    const filteredPlanets = planetsData.filter(planet =>
-        planet.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        planet.items.some(item => item.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    const handleNext = () => { }
+    const handlePrevious = () => { }
+    useEffect(
+        () => {
+            getData()
+        }, [])
+
+    useEffect(
+        () => {
+            if (planetsData.length == 0) return;
+            const filtrados = planetsData.filter(planet =>
+                planet.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredPlanets(filtrados)
+        }, [planetsData,]
+    )
 
     return (
         <div className="container py-5">
@@ -99,11 +50,12 @@ export const Planets = () => {
                 {filteredPlanets.length > 0 ? (
                     filteredPlanets.map((planet) => (
                         <StarWarsCard
-                            key={planet.id}
-                            image={planet.image}
-                            title={planet.title}
-                            items={planet.items}
-                            onClick={() => handlePlanetClick(planet.id, planet.title)}
+                            key={planet.uid}
+                            title={planet.name}
+                            items={[]}
+                            id={planet.uid}
+                            uri={uri}
+                            endpoint={planet.url}
                         />
                     ))
                 ) : (
@@ -115,6 +67,22 @@ export const Planets = () => {
                         </div>
                     </div>
                 )}
+            </div>
+            <div className="d-flex justify-content-center gap-3 my-4">
+                <button
+                    className="btn btn-outline-warning px-4"
+                    onClick={handlePrevious}
+                >
+                    <i className="fas fa-chevron-left me-2"></i>
+                    Previous
+                </button>
+                <button
+                    className="btn btn-outline-warning px-4"
+                    onClick={handleNext}
+                >
+                    Next
+                    <i className="fas fa-chevron-right ms-2"></i>
+                </button>
             </div>
         </div>
     );

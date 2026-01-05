@@ -1,5 +1,4 @@
-export const apiRequest = async (host, endpoint, metodo, body = null) => {
-  const uri = `${host}${endpoint}`;
+export const apiRequest = async (uri, metodo, body = null) => {
   const options = {
     method: metodo,
     headers: {

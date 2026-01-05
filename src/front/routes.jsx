@@ -7,12 +7,12 @@ import {
 } from "react-router-dom";
 import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
-import { ContactList } from "./pages/ContactList/ContactList.jsx";
 // import SingleContact from "./pages/ContactList/SingleContact.jsx";
 import { ContactListLayout } from "./pages/ContactList/ContactListLayout.jsx";
 import { People } from "./pages/People/People.jsx";
 import { Vehicles } from "./pages/Vehicles/Vehicles.jsx";
 import { Planets } from "./pages/Planets/Planets.jsx";
+import { DetailView } from "./pages/DetailView.jsx";
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -30,6 +30,9 @@ export const router = createBrowserRouter(
 			<Route path="/vehicles" element={<Vehicles />} />
 			<Route path="/planets" element={<Planets />} />
 			<Route path="/contacts" element={<ContactListLayout />} />
+			<Route path="/vehicles/:vehicle_id" element={<DetailView />} />
+			<Route path="/planets/:planet_id" element={<DetailView />} />
+			<Route path="/people/:people_id" element={<DetailView />} />
 			{/* <Route path="/contactos/:id" element={<SingleContact />} />  Dynamic route for single items */}
 		</Route>
 	)

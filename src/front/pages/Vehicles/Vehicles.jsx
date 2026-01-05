@@ -3,19 +3,23 @@ import { StarWarsCard } from '../../components/StarWarsCard';
 import { searchContext } from '../Layout';
 import { apiRequest } from '../../apiRequest';
 import { useNavigate } from 'react-router-dom';
+import { Planets } from '../Planets/Planets';
 
 export const Vehicles = () => {
     const [searchTerm, setSearchTerm] = useContext(searchContext);
     const [vehiclesData, setVehiclesData] = useState([])
     const [filteredVehicles, setFilteredVehicles] = useState([])
-    const navigate = useNavigate()
 
     const host = "https://www.swapi.tech/api";
+    const uri = "vehicles";
+
     const getData = async () => {
-        const data = await apiRequest(host, "/vehicles", "GET");
-        console.log(data.results)
+        const data = await apiRequest(`${host}/${uri}`, "GET");
         setVehiclesData(data.results)
     }
+
+    const handleNext = () => { }
+    const handlePrevious = () => { }
     useEffect(
         () => {
             getData()
@@ -23,7 +27,6 @@ export const Vehicles = () => {
 
     useEffect(
         () => {
-            console.log(vehiclesData)
             if (vehiclesData.length == 0) return;
             const filtrados = vehiclesData.filter(vehicle =>
                 vehicle.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -32,13 +35,6 @@ export const Vehicles = () => {
         }, [vehiclesData,]
     )
 
-
-
-    // const vehiclesData = ;
-
-    const handleVehicleClick = async (id) => {
-        console.log(`Vehicle clicked: (ID: ${id})`);
-    };
 
     return (
         <div className="container py-5">
@@ -56,10 +52,12 @@ export const Vehicles = () => {
                 {filteredVehicles.length > 0 ? (
                     filteredVehicles.map((vehicle) => (
                         <StarWarsCard
-                            key={vehicle.id}
-                            title={vehicle.title}
-                            items={[vehicle.name]}
-                            onClick={() => handleVehicleClick(vehicle.id)}
+                            key={vehicle.uid}
+                            id={vehicle.uid}
+                            title={vehicle.name}
+                            items={[]}
+                            uri={uri}
+                            endpoint={vehicle.url}
                         />
                     ))
                 ) : (
@@ -71,6 +69,22 @@ export const Vehicles = () => {
                         </div>
                     </div>
                 )}
+            </div>
+            <div className="d-flex justify-content-center gap-3 my-4">
+                <button
+                    className="btn btn-outline-warning px-4"
+                    onClick={handlePrevious}
+                >
+                    <i className="fas fa-chevron-left me-2"></i>
+                    Previous
+                </button>
+                <button
+                    className="btn btn-outline-warning px-4"
+                    onClick={handleNext}
+                >
+                    Next
+                    <i className="fas fa-chevron-right ms-2"></i>
+                </button>
             </div>
         </div>
     );
