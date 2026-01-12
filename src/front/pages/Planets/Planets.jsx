@@ -15,7 +15,7 @@ export const Planets = () => {
     const uri = "planets"
 
     const getData = async (endpoint) => {
-        const data = await apiRequest(endpoint, "GET");
+        const { data } = await apiRequest(endpoint, "GET");
         if (!data.results) return;
         setPlanetsData(data.results)
         setPrevious(data.previous)

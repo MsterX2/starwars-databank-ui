@@ -11,7 +11,7 @@ export const DetailView = () => {
     const image = location.state.image;
 
     const getData = async (endpoint) => {
-        const data = await apiRequest(endpoint, "GET");
+        const { data } = await apiRequest(endpoint, "GET");
         const properties = Object.entries(data.result.properties).map(
             ([label, value]) => ({ label, value })
         );

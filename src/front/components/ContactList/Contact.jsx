@@ -1,16 +1,24 @@
 import React from 'react';
 import { useCrudContext } from '../../hooks/useContactsContex.jsx';
 import { useAnimationContext } from '../../hooks/useAnimationContext.jsx';
+import { apiRequest } from '../../apiRequest.js';
+import { useNavigate } from 'react-router-dom';
 
 export const Contact = ({ id, name, address, phone, email }) => {
     const context = useCrudContext();
     const { setAnimatingId,
         setAnimationType } = useAnimationContext();
+    const navigate = useNavigate()
+    const user = "chanchitoFeliz";
+    const image = `https://api.dicebear.com/7.x/personas/svg?seed=${id}`;
+    const host = "https://playground.4geeks.com/contact";
 
     if (!context) {
         throw new Error('Contact must be used within ContactContextProvider');
     }
-
+    const handleClick = event => {
+        navigate("/contacts/details", { state: { id, name, address, phone, email, image } })
+    }
     const {
         setEditValue,
         contacts,
@@ -19,32 +27,37 @@ export const Contact = ({ id, name, address, phone, email }) => {
 
     const handleEdit = (e) => {
         e.stopPropagation();
-        const contact = contacts.find(c => c.id === id);
-        if (contact) {
+        const editingContact = contacts.find(contact => contact.id === id);
+        if (editingContact) {
             setEditValue({
                 method: "PUT",
-                contact: contact
+                contact: editingContact
             });
         }
     };
 
-    const handleDelete = (e) => {
+    const handleDelete = async e => {
         e.stopPropagation();
         setAnimatingId(id);
         setAnimationType('delete');
-        setTimeout(() => {
+        const { ok } = await apiRequest(`${host}/agendas/${user}/contacts/${id}`, "DELETE")
+        if (ok) {
             setContacts(contacts.filter(contact => contact.id !== id));
-            setAnimatingId(null);
-            setAnimationType(null);
-        }, 500);
+            setTimeout(() => {
+                setAnimatingId(null);
+                setAnimationType(null);
+            }, 1000);
+            return
+        }
+        console.log("Error al eliminar")
     };
 
     return (
-        <li className="list-group-item contact-item">
+        <li className="list-group-item contact-item" onClick={handleClick}>
             <div className="userData">
                 <img
                     className="userImage"
-                    src={`https://loremflickr.com/80/80/starwars?lock=${id}`}
+                    src={image}
                     alt="userImage"
                 />
                 <div className="userDetails">

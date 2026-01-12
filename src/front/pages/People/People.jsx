@@ -14,7 +14,7 @@ export const People = () => {
     const uri = "people"
 
     const getData = async (endpoint) => {
-        const data = await apiRequest(endpoint, "GET");
+        const { data } = await apiRequest(endpoint, "GET");
         if (!data.results) return;
         setPeopleData(data.results)
         setPrevious(data.previous)

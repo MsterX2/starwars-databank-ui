@@ -1,16 +1,22 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Contact } from '../../components/ContactList/Contact.jsx';
 import { ContactForm } from '../../components/ContactList/ContactForm.jsx';
 import { useCrudContext } from '../../hooks/useContactsContex.jsx';
 import { searchContext } from '../Layout.jsx';
 import { useAnimationContext } from '../../hooks/useAnimationContext.jsx';
+import { apiRequest } from '../../apiRequest.js';
+
 
 
 export const ContactList = () => {
 	const context = useCrudContext();
-	const { animatingId,
-		animationType } = useAnimationContext()
+	const { animatingId, animationType } = useAnimationContext();
 	const [searchTerm, setSearchTerm] = useContext(searchContext);
+	const [isLogged, setIsLogged] = useState(false);
+
+	const user = "chanchitoFeliz"
+
+	const host = "https://playground.4geeks.com/contact";
 
 	if (!context) {
 		throw new Error('ContactList must be used within ContactContextProvider');
@@ -18,6 +24,7 @@ export const ContactList = () => {
 
 	const {
 		contacts,
+		setContacts,
 		setEditValue
 	} = context;
 
@@ -31,6 +38,29 @@ export const ContactList = () => {
 		contact.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
 		contact.address.toLowerCase().includes(searchTerm.toLowerCase())
 	);
+
+
+
+	const fetchInitialData = async (host, user) => {
+		const response = await apiRequest(`${host}/agendas/${user}`, "GET", { notFoundText: `el usuario ${user} no existe, porfavor cree un nuevo usuario` })
+		if (!response.ok) {
+			const { status, statusText } = response
+			if (status === 404) {
+				const { data } = await apiRequest(`${host}/agendas/${user}`, "POST");
+				return;
+			};
+			console.log({ status, statusText })
+			return
+		}
+		const { data: { contacts, slug } } = response
+		setContacts(contacts);
+	}
+
+	useEffect(
+		() => {
+			fetchInitialData(host, user);
+		}, []
+	)
 
 	return (
 		<div className="container py-5">

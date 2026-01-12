@@ -16,7 +16,7 @@ export const Vehicles = () => {
     const uri = "vehicles";
 
     const getData = async (endpoint) => {
-        const data = await apiRequest(endpoint, "GET");
+        const { data } = await apiRequest(endpoint, "GET");
         if (!data.results) return;
         setVehiclesData(data.results)
         setPrevious(data.previous)

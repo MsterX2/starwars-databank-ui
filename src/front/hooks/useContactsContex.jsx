@@ -13,29 +13,7 @@ export const ContactContextProvider = ({ children }) => {
         email: ""
     });
 
-    const [contacts, setContacts] = useState([
-        {
-            id: 1,
-            name: 'Luke Skywalker',
-            address: 'Tatooine, Mos Eisley Cantina',
-            phone: '+1-555-FORCE-01',
-            email: 'luke@rebellion.com'
-        },
-        {
-            id: 2,
-            name: 'Leia Organa',
-            address: 'Alderaan, Royal Palace',
-            phone: '+1-555-REBEL-02',
-            email: 'princess@rebellion.com'
-        },
-        {
-            id: 3,
-            name: 'Han Solo',
-            address: 'Millennium Falcon, Docking Bay 94',
-            phone: '+1-555-SMUGGL',
-            email: 'han@smuggler.com'
-        }
-    ]);
+    const [contacts, setContacts] = useState([]);
 
     return (
         <crudContext.Provider

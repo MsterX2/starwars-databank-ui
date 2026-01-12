@@ -17,7 +17,7 @@ const Main = () => {
         <React.StrictMode>
             {/* Provide global state to all components */}
             <StoreProvider>
-                <RouterProvider router={router}>
+                <RouterProvider router={router} future={{ v7_startTransition: true }} >
                 </RouterProvider>
             </StoreProvider>
         </React.StrictMode>

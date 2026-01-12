@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useCrudContext } from '../../hooks/useContactsContex.jsx';
 import { useAnimationContext } from '../../hooks/useAnimationContext.jsx';
+import { apiRequest } from '../../apiRequest.js';
+import { getContacts } from '../../contactsCrud.js';
 
 export const ContactForm = () => {
     const context = useCrudContext();
@@ -9,7 +11,8 @@ export const ContactForm = () => {
     if (!context) {
         throw new Error('ContactForm must be used within ContactContextProvider');
     }
-
+    const user = "chanchitoFeliz"
+    const host = "https://playground.4geeks.com/contact";
     const {
         editValue,
         setEditValue,
@@ -32,14 +35,15 @@ export const ContactForm = () => {
                 email: editValue.contact.email,
                 address: editValue.contact.address
             });
-        } else {
-            setContactForm({
-                name: '',
-                phone: '',
-                email: '',
-                address: ''
-            });
+            return;
         }
+        setContactForm({
+            name: '',
+            phone: '',
+            email: '',
+            address: ''
+        });
+
     }, [editValue]);
 
     const handleInput = (e) => {
@@ -50,40 +54,44 @@ export const ContactForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (editValue?.method === "POST") {
-            const newContact = {
-                id: Math.max(...contacts.map(c => c.id), 0) + 1,
-                ...contactForm
-            };
-            setContacts([...contacts, newContact]);
+            const newContact = contactForm;
+            const { ok, data } = await apiRequest(`${host}/agendas/${user}/contacts`, "POST", { body: newContact })
+            if (ok) {
+                setContacts([...contacts, data]);
+                setAnimatingId(data.id);
+                setAnimationType('add');
 
-            setAnimatingId(newContact.id);
-            setAnimationType('add');
-
-            setTimeout(() => {
-                setAnimatingId(null);
-                setAnimationType(null);
-            }, 1000);
+                setTimeout(() => {
+                    setAnimatingId(null);
+                    setAnimationType(null);
+                }, 1000);
+                return
+            }
+            console.log("error al crear el contact", data)
 
         } else if (editValue?.method === "PUT" && editValue.contact) {
+
+            const { ok, data } = await apiRequest(`${host}/agendas/${user}/contacts/${editValue.contact.id}`, "PUT", { body: contactForm })
+
             setContacts(
                 contacts.map(contact =>
                     contact.id === editValue.contact.id
-                        ? { ...contact, ...contactForm }
+                        ? { ...contact, ...data }
                         : contact
                 )
             );
+            if (ok) {
+                setAnimatingId(editValue.contact.id);
+                setAnimationType('edit');
 
-            setAnimatingId(editValue.contact.id);
-            setAnimationType('edit');
-
-            setTimeout(() => {
-                setAnimatingId(null);
-                setAnimationType(null);
-            }, 1000);
+                setTimeout(() => {
+                    setAnimatingId(null);
+                    setAnimationType(null);
+                }, 1000);
+            }
         }
 
         setContactForm({
@@ -126,9 +134,9 @@ export const ContactForm = () => {
                             </h1>
                             <button
                                 type="button"
-                                className="btn-close btn-close-white"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
+                                // className="btn-close btn-close-white"
+                                // data-bs-dismiss="modal"
+                                // aria-label="Close"
                                 onClick={handleClose}
                             ></button>
                         </div>
