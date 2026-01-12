@@ -7,7 +7,6 @@ import { ContactList } from './ContactList/ContactList'
 import { People } from "./People/People"
 import { Vehicles } from "./Vehicles/Vehicles"
 import { Planets } from "./Planets/Planets"
-import { ContactContextProvider } from "../hooks/useContactsContex"
 
 export const searchContext = createContext()
 // Base component that maintains the navbar and footer throughout the page and the scroll to top functionality.

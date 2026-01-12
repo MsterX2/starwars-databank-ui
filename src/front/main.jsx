@@ -5,6 +5,7 @@ import { RouterProvider } from "react-router-dom";  // Import RouterProvider to 
 import { router } from "./routes.jsx";  // Import the router configuration
 import { StoreProvider } from './hooks/useGlobalReducer.jsx';  // Import the StoreProvider for global state management
 import { BackendURL } from './components/BackendURL';
+import { StarWarsProvider } from './hooks/useStarWarsContext.jsx';
 
 const Main = () => {
 
@@ -17,8 +18,10 @@ const Main = () => {
         <React.StrictMode>
             {/* Provide global state to all components */}
             <StoreProvider>
-                <RouterProvider router={router} future={{ v7_startTransition: true }} >
-                </RouterProvider>
+                <StarWarsProvider>
+                    <RouterProvider router={router} future={{ v7_startTransition: true }} >
+                    </RouterProvider>
+                </StarWarsProvider>
             </StoreProvider>
         </React.StrictMode>
     );

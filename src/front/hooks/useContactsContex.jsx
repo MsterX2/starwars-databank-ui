@@ -1,50 +1,18 @@
-import { createContext, useContext, useState } from "react";
+import { useContext, useReducer, createContext } from "react";
+import storeReducer, { initialStore } from "../contactStore";
 
-export const crudContext = createContext(undefined);
-export const singleContactContext = createContext(undefined);
+const StoreContext = createContext();
 
-export const ContactContextProvider = ({ children }) => {
-    const [editValue, setEditValue] = useState(null);
-    const [singleContact, setSingleContact] = useState({
-        id: 0,
-        name: "",
-        address: "",
-        phone: "",
-        email: ""
-    });
-
-    const [contacts, setContacts] = useState([]);
+export function StoreProvider({ children }) {
+    const [store, dispatch] = useReducer(storeReducer, initialStore());
 
     return (
-        <crudContext.Provider
-            value={{
-                editValue,
-                setEditValue,
-                contacts,
-                setContacts
-            }}
-        >
-            <singleContactContext.Provider value={{ singleContact, setSingleContact }}>
-                {children}
-            </singleContactContext.Provider>
-        </crudContext.Provider>
+        <StoreContext.Provider value={{ store, dispatch }}>
+            {children}
+        </StoreContext.Provider>
     );
-};
-
-
-export const useCrudContext = () => {
-    const {
-        editValue,
-        setEditValue,
-        contacts,
-        setContacts
-    } = useContext(crudContext)
-    return {
-        editValue, setEditValue, contacts, setContacts
-    }
 }
 
-export const useSingleContact = () => {
-    const { singleContact, setSingleContact } = useContext(singleContactContext)
-    return { singleContact, setSingleContact }
+export default function useGlobalReducer() {
+    return useContext(StoreContext);
 }

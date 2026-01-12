@@ -1,41 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { apiRequest } from '../apiRequest';
+import { fetchDetail, toggleLike } from '../starWarsActions';
+import { useStarWarsContext } from '../hooks/useStarWarsContext';
 
 export const DetailView = () => {
-    const [items, setItems] = useState([]);
-    const [isLiked, setIsLiked] = useState(false);
-    const navigate = useNavigate()
     const { id } = useParams();
     const location = useLocation();
-    const image = location.state.image;
+    const navigate = useNavigate();
+    const { state, dispatch } = useStarWarsContext();
 
-    const getData = async (endpoint) => {
-        const { data } = await apiRequest(endpoint, "GET");
-        const properties = Object.entries(data.result.properties).map(
-            ([label, value]) => ({ label, value })
-        );
-        setItems(properties);
-    };
+    const { detail, likes, loading } = state;
+    const { endpoint, image, title } = location.state;
 
-    const title = "T-16 skyhopper";
+    const isLiked = likes.includes(id);
 
     useEffect(() => {
-        getData(location.state.endpoint);
+        fetchDetail(dispatch, endpoint);
     }, []);
-
-    const handleLikeToggle = () => {
-        setIsLiked(!isLiked);
-    };
-
-    const onBack = () => {
-        navigate(-1)
-    }
 
     return (
         <div className="container py-5">
             <div className="detail-view-container">
-                <button onClick={onBack} className="btn btn-secondary mb-4 star-wars-back-button">
+                <button
+                    onClick={() => navigate(-1)}
+                    className="btn btn-secondary mb-4 star-wars-back-button"
+                >
                     <i className="fas fa-arrow-left me-2"></i>
                     Back to List
                 </button>
@@ -46,8 +35,8 @@ export const DetailView = () => {
                             <img src={image} alt={title} className="detail-image" />
 
                             <button
-                                className={`like-button ${isLiked ? 'liked' : ''}`}
-                                onClick={handleLikeToggle}
+                                className={`like-button ${isLiked ? "liked" : ""}`}
+                                onClick={() => toggleLike(dispatch, id)}
                             >
                                 <i className="fas fa-heart"></i>
                             </button>
@@ -57,14 +46,23 @@ export const DetailView = () => {
                             <div className="detail-content">
                                 <h2 className="detail-title">{title}</h2>
 
-                                <div className="detail-info-grid">
-                                    {items.map((item, index) => (
-                                        <div key={index} className="detail-info-item">
-                                            <span className="detail-label">{item.label}:</span>
-                                            <span className="detail-value">{item.value}</span>
+                                {loading ? (
+                                    <div className="text-center">
+                                        <div className="spinner-border text-warning" role="status">
+                                            <span className="visually-hidden">Loading...</span>
                                         </div>
-                                    ))}
-                                </div>
+                                        <p className="mt-2">Loading details... Fun fact: Lightsabers can cut through almost anything!</p>
+                                    </div>
+                                ) : (
+                                    <div className="detail-info-grid">
+                                        {detail.map((item, index) => (
+                                            <div key={index} className="detail-info-item">
+                                                <span className="detail-label">{item.label}:</span>
+                                                <span className="detail-value">{item.value}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
                             </div>
                         </div>

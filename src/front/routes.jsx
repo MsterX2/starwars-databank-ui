@@ -1,5 +1,3 @@
-// Import necessary components and functions from react-router-dom.
-
 import {
 	createBrowserRouter,
 	createRoutesFromElements,
@@ -7,11 +5,11 @@ import {
 } from "react-router-dom";
 import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
-// import SingleContact from "./pages/ContactList/SingleContact.jsx";
 import { ContactListLayout } from "./pages/ContactList/ContactListLayout.jsx";
 import { People } from "./pages/People/People.jsx";
 import { Vehicles } from "./pages/Vehicles/Vehicles.jsx";
 import { Planets } from "./pages/Planets/Planets.jsx";
+import { Favorites } from "./pages/Favorites.jsx";
 import { DetailView } from "./pages/DetailView.jsx";
 import { Login } from "./pages/Login.jsx";
 import { ContactDetails } from "./pages/ContactList/ContactDetails.jsx";
@@ -28,6 +26,8 @@ export const router = createBrowserRouter(
 
 			<Route path="/planets" element={<Planets />} />
 			<Route path="/planets/:planet_id" element={<DetailView />} />
+
+			<Route path="/favorites" element={<Favorites />} />
 
 			<Route path="/contacts" element={<ContactListLayout />} />
 			<Route path="/contacts/details" element={<ContactDetails />} />

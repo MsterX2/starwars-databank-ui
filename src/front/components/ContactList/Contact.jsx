@@ -1,29 +1,22 @@
 import React from 'react';
-import { useCrudContext } from '../../hooks/useContactsContex.jsx';
 import { useAnimationContext } from '../../hooks/useAnimationContext.jsx';
-import { apiRequest } from '../../apiRequest.js';
 import { useNavigate } from 'react-router-dom';
+import useGlobalReducer from '../../hooks/useContactsContex.jsx';
+import { deleteContact } from '../../action.js';
 
-export const Contact = ({ id, name, address, phone, email }) => {
-    const context = useCrudContext();
+export const Contact = ({ id, name, address, phone, email, setEditValue }) => {
     const { setAnimatingId,
         setAnimationType } = useAnimationContext();
     const navigate = useNavigate()
+    const { store, dispatch } = useGlobalReducer();
+    const { contacts, loading, error } = store;
     const user = "chanchitoFeliz";
     const image = `https://api.dicebear.com/7.x/personas/svg?seed=${id}`;
     const host = "https://playground.4geeks.com/contact";
 
-    if (!context) {
-        throw new Error('Contact must be used within ContactContextProvider');
-    }
     const handleClick = event => {
         navigate("/contacts/details", { state: { id, name, address, phone, email, image } })
     }
-    const {
-        setEditValue,
-        contacts,
-        setContacts
-    } = context;
 
     const handleEdit = (e) => {
         e.stopPropagation();
@@ -36,20 +29,24 @@ export const Contact = ({ id, name, address, phone, email }) => {
         }
     };
 
-    const handleDelete = async e => {
+    const handleDelete = async (e) => {
         e.stopPropagation();
+
         setAnimatingId(id);
-        setAnimationType('delete');
-        const { ok } = await apiRequest(`${host}/agendas/${user}/contacts/${id}`, "DELETE")
+        setAnimationType("delete");
+
+        const ok = await deleteContact(dispatch, host, user, id);
+
         if (ok) {
-            setContacts(contacts.filter(contact => contact.id !== id));
             setTimeout(() => {
                 setAnimatingId(null);
                 setAnimationType(null);
             }, 1000);
-            return
+        } else {
+            console.log("Error al eliminar el contacto");
+            setAnimatingId(null);
+            setAnimationType(null);
         }
-        console.log("Error al eliminar")
     };
 
     return (

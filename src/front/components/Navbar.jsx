@@ -71,6 +71,17 @@ export const Navbar = ({ activeSection, onSectionChange }) => {
 
 						<li className="nav-item">
 							<NavLink
+								to={"/favorites"}
+								className={`nav-link border-0 bg-transparent ${activeSection === 'favorites' ? 'active' : ''}`}
+								style={{ cursor: 'pointer' }}
+							>
+								<i className="fas fa-heart me-2"></i>
+								Favorites
+							</NavLink>
+						</li>
+
+						<li className="nav-item">
+							<NavLink
 								to={"/contacts"}
 								className={`nav-link border-0 bg-transparent ${activeSection === 'contacts' ? 'active' : ''}`}
 								style={{ cursor: 'pointer' }}

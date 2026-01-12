@@ -1,4 +1,3 @@
-@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap');
 
@@ -51,7 +50,6 @@ body::before {
 
 .star-wars-container {
   position: relative;
-  /* z-index: 1; */
 }
 
 .star-wars-title {
@@ -98,6 +96,7 @@ header p.lead {
   box-shadow:
     0 0 20px rgba(255, 232, 31, 0.3),
     inset 0 0 20px rgba(255, 232, 31, 0.1);
+  position: relative;
 }
 
 .star-wars-card:hover {
@@ -186,7 +185,6 @@ footer i {
   }
 }
 
-/* Navbar Styles */
 .star-wars-navbar {
   background: linear-gradient(90deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%) !important;
   border-bottom: 2px solid #FFE81F;
@@ -239,7 +237,6 @@ footer i {
   filter: brightness(0) saturate(100%) invert(85%) sepia(73%) saturate(1352%) hue-rotate(359deg) brightness(104%) contrast(102%);
 }
 
-/* Section Titles */
 .section-title {
   color: #FFE81F;
   font-family: 'Orbitron', sans-serif;
@@ -258,7 +255,6 @@ footer i {
   text-shadow: 0 0 10px #00d4ff;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .star-wars-title {
     font-size: 2rem !important;
@@ -294,7 +290,6 @@ span {
   font-family: 'Roboto', sans-serif;
 }
 
-/* Contact List Styles */
 .contact-list {
   max-width: 900px;
   margin: 0 auto;
@@ -392,7 +387,6 @@ span {
   transform: translateY(-2px);
 }
 
-/* Modal Styles */
 .star-wars-modal {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
   border: 2px solid #FFE81F !important;
@@ -446,7 +440,6 @@ span {
   color: rgba(0, 212, 255, 0.5);
 }
 
-/* Contact Animations */
 .contact-wrapper {
   transition: all 0.5s ease;
 }
@@ -512,7 +505,6 @@ span {
   }
 }
 
-/* Responsive Contact List */
 @media (max-width: 768px) {
   .contact-item {
     flex-direction: column;
@@ -530,7 +522,6 @@ span {
   }
 }
 
-/* Search Bar Styles */
 .search-container {
   position: relative;
   display: flex;
@@ -570,7 +561,6 @@ span {
   font-family: 'Orbitron', sans-serif;
 }
 
-/* No Results Styles */
 .no-results {
   padding: 4rem 2rem;
   color: #00d4ff;
@@ -595,7 +585,6 @@ span {
   opacity: 0.8;
 }
 
-/* Responsive Search */
 @media (max-width: 992px) {
   .search-container {
     margin-top: 1rem;
@@ -607,7 +596,6 @@ span {
   }
 }
 
-/* Like Button Styles */
 .like-button {
   position: absolute;
   top: 15px;
@@ -677,7 +665,6 @@ span {
   }
 }
 
-/* Detail View Styles */
 .detail-view-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -793,7 +780,6 @@ span {
   transform: translateX(-5px);
 }
 
-/* Responsive Detail View */
 @media (max-width: 768px) {
   .detail-image {
     min-height: 300px;

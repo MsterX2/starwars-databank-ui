@@ -1,31 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useCrudContext } from '../../hooks/useContactsContex.jsx';
 import { useAnimationContext } from '../../hooks/useAnimationContext.jsx';
-import { apiRequest } from '../../apiRequest.js';
-import { getContacts } from '../../contactsCrud.js';
+import { createContact, updateContact } from '../../action.js';
+import useGlobalReducer from '../../hooks/useContactsContex.jsx';
 
-export const ContactForm = () => {
-    const context = useCrudContext();
+export const ContactForm = ({ editValue, setEditValue }) => {
     const { setAnimatingId,
         setAnimationType } = useAnimationContext()
-    if (!context) {
-        throw new Error('ContactForm must be used within ContactContextProvider');
-    }
-    const user = "chanchitoFeliz"
-    const host = "https://playground.4geeks.com/contact";
-    const {
-        editValue,
-        setEditValue,
-        contacts,
-        setContacts
-    } = context;
-
     const [contactForm, setContactForm] = useState({
         name: '',
         phone: '',
         email: '',
         address: ''
     });
+    const { store, dispatch } = useGlobalReducer();
+    const user = "chanchitoFeliz"
+    const host = "https://playground.4geeks.com/contact";
+
+
+
 
     useEffect(() => {
         if (editValue && editValue.method === "PUT" && editValue.contact) {
@@ -54,54 +46,38 @@ export const ContactForm = () => {
         });
     };
 
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (editValue?.method === "POST") {
-            const newContact = contactForm;
-            const { ok, data } = await apiRequest(`${host}/agendas/${user}/contacts`, "POST", { body: newContact })
-            if (ok) {
-                setContacts([...contacts, data]);
-                setAnimatingId(data.id);
-                setAnimationType('add');
-
-                setTimeout(() => {
-                    setAnimatingId(null);
-                    setAnimationType(null);
-                }, 1000);
-                return
-            }
-            console.log("error al crear el contact", data)
-
+            await createContact(dispatch, host, user, contactForm);
         } else if (editValue?.method === "PUT" && editValue.contact) {
-
-            const { ok, data } = await apiRequest(`${host}/agendas/${user}/contacts/${editValue.contact.id}`, "PUT", { body: contactForm })
-
-            setContacts(
-                contacts.map(contact =>
-                    contact.id === editValue.contact.id
-                        ? { ...contact, ...data }
-                        : contact
-                )
+            await updateContact(
+                dispatch,
+                host,
+                user,
+                editValue.contact.id,
+                contactForm
             );
-            if (ok) {
-                setAnimatingId(editValue.contact.id);
-                setAnimationType('edit');
 
-                setTimeout(() => {
-                    setAnimatingId(null);
-                    setAnimationType(null);
-                }, 1000);
-            }
+            setAnimatingId(editValue.contact.id);
+            setAnimationType("edit");
+            setTimeout(() => {
+                setAnimatingId(null);
+                setAnimationType(null);
+            }, 1000);
         }
-
         setContactForm({
-            name: '',
-            phone: '',
-            email: '',
-            address: ''
+            name: "",
+            phone: "",
+            email: "",
+            address: "",
         });
         setEditValue(null);
     };
+
 
     const handleClose = () => {
         setEditValue(null);
@@ -134,9 +110,6 @@ export const ContactForm = () => {
                             </h1>
                             <button
                                 type="button"
-                                // className="btn-close btn-close-white"
-                                // data-bs-dismiss="modal"
-                                // aria-label="Close"
                                 onClick={handleClose}
                             ></button>
                         </div>
