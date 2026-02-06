@@ -1,0 +1,20 @@
+FROM python:3.13-slim
+
+# Install system dependencies for pygraphviz
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libgraphviz-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY Pipfile Pipfile.lock database.sh ./
+COPY docs/ ./docs/
+
+RUN pip install pipenv
+
+RUN pipenv install --system --dev
+
+EXPOSE 3001
+
+CMD ["pipenv", "run", "start"]
