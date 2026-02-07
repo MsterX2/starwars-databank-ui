@@ -1,7 +1,7 @@
 import os
 # import inspect
 from flask_admin import Admin
-from .models import db, Users, Posts, Comments, Medias, Followers, Characters, CharacterFavorites, Planets, PlanetFavorites
+from .models import db, Users, Posts, Comments, Medias, Followers, Characters, CharacterFavorites, Planets, PlanetFavorites, Vehicles, VehicleFavorites
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.theme import Bootstrap4Theme
 
@@ -27,3 +27,5 @@ def setup_admin(app):
     admin.add_view(ModelView(CharacterFavorites, db.session))
     admin.add_view(ModelView(Planets, db.session))
     admin.add_view(ModelView(PlanetFavorites, db.session))
+    admin.add_view(ModelView(Vehicles, db.session))
+    admin.add_view(ModelView(VehicleFavorites, db.session))

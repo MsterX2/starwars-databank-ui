@@ -8,9 +8,9 @@ class Users(db.Model):
     id = db.Column(  db.Integer, primary_key=True)
     email = db.Column(  db.String(), unique=True, nullable=False)
     password = db.Column(  db.String(), unique=False, nullable=False)
-    is_active = db.Column(  db.Boolean, unique=False, nullable=False)
+    is_active = db.Column(  db.Boolean(), unique=False, nullable=False)
     first_name = db.Column(  db.String(80), unique=False, nullable=False)
-    last_name = db.Column(  db.String(80), unique=False, nullable=False)
+    last_name = db.Column(  db.String(80), unique=False, nullable=True)
 
     def __repr__(self):
         return f'<User {self.id}: {self.email}>'
@@ -114,19 +114,19 @@ class Followers(db.Model):
 class Characters(db.Model):
     id = db.Column(  db.Integer, primary_key=True)
     name = db.Column(  db.String(120), unique=True, nullable=False)
-    height = db.Column(  db.String(120), unique=True, nullable=False)
-    mass = db.Column(  db.String(120), unique=True, nullable=False)
-    hair_color = db.Column(  db.String(120), unique=True, nullable=False)
-    skin_color = db.Column(  db.String(120), unique=True, nullable=False)
-    eye_color = db.Column(  db.String(120), unique=True, nullable=False)
-    birth_year = db.Column(  db.String(120), unique=True, nullable=False)
-    gender = db.Column(  db.String(120), unique=True, nullable=False)
+    height = db.Column(  db.String(120), unique=False, nullable=True)
+    mass = db.Column(  db.String(120), unique=False, nullable=True)
+    hair_color = db.Column(  db.String(120), unique=False, nullable=True)
+    skin_color = db.Column(  db.String(120), unique=False, nullable=True)
+    eye_color = db.Column(  db.String(120), unique=False, nullable=True)
+    birth_year = db.Column(  db.String(120), unique=False, nullable=True)
+    gender = db.Column(  db.String(120), unique=False, nullable=True)
 
     def __repr__(self):
         return f'<Character {self.name}>'
 
     def serialize(self):
-        return {"id": self.id,
+        return {"uid": self.id,
                 "name": self.name,
                 "height": self.height,
                 "mass": self.mass,
@@ -134,7 +134,8 @@ class Characters(db.Model):
                 "skin_color": self.skin_color,
                 "eye_color": self.eye_color,
                 "birth_year": self.birth_year,
-                "gender": self.gender}
+                "gender": self.gender,
+                "url": f"/api/people/{self.id}"}
 
 
 class CharacterFavorites(db.Model):
@@ -173,7 +174,7 @@ class Planets(db.Model):
         return f'<Planet {self.id}: {self.name}>'
 
     def serialize(self):
-        return {"id": self.id,
+        return {"uid": self.id,
                 "name": self.name,
                 "diameter": self.diameter,
                 "rotation_period": self.rotation_period,
@@ -181,7 +182,8 @@ class Planets(db.Model):
                 "gravity": self.gravity,
                 "population": self.population,
                 "climate": self.climate,
-                "terrain": self.terrain}
+                "terrain": self.terrain,
+                "url": f"/api/planets/{self.id}"}
 
 
 class PlanetFavorites(db.Model):
@@ -203,3 +205,58 @@ class PlanetFavorites(db.Model):
         return {"id": self.id,
                 "user_id": self.user_id,
                 "planet_id": self.planet_id}
+
+
+class Vehicles(db.Model):
+    id = db.Column(  db.Integer, primary_key=True)
+    name = db.Column(  db.String(120), unique=True, nullable=False)
+    model = db.Column(  db.String(120), unique=False, nullable=True)
+    manufacturer = db.Column(  db.String(120), unique=False, nullable=True)
+    cost_in_credits = db.Column(  db.String(120), unique=False, nullable=True)
+    length = db.Column(  db.String(120), unique=False, nullable=True)
+    max_atmosphering_speed = db.Column(  db.String(120), unique=False, nullable=True)
+    crew = db.Column(  db.String(120), unique=False, nullable=True)
+    passengers = db.Column(  db.String(120), unique=False, nullable=True)
+    cargo_capacity = db.Column(  db.String(120), unique=False, nullable=True)
+    consumables = db.Column(  db.String(120), unique=False, nullable=True)
+    vehicle_class = db.Column(  db.String(120), unique=False, nullable=True)
+
+    def __repr__(self):
+        return f'<Vehicle {self.id}: {self.name}>'
+
+    def serialize(self):
+        return {"uid": self.id,
+                "id": self.id,
+                "name": self.name,
+                "model": self.model,
+                "vehicle_class": self.vehicle_class,
+                "manufacturer": self.manufacturer,
+                "length": self.length,
+                "cost_in_credits": self.cost_in_credits,
+                "crew": self.crew,
+                "passengers": self.passengers,
+                "max_atmosphering_speed": self.max_atmosphering_speed,
+                "cargo_capacity": self.cargo_capacity,
+                "consumables": self.consumables,
+                "url": f"/api/vehicles/{self.id}"}
+
+
+class VehicleFavorites(db.Model):
+    id = db.Column(  db.Integer, primary_key=True)
+    user_id = db.Column(  db.Integer, db.ForeignKey("users.id"),
+                          unique=False, nullable=False)
+    vehicle_id = db.Column(  db.Integer, db.ForeignKey("vehicles.id"),
+                             unique=False, nullable=False)
+    user_to = db.relationship(  "Users", foreign_keys=[user_id],
+                                backref=db.backref("vehicle_favorites_to", lazy="select"))
+    vehicles_to = db.relationship(  "Vehicles", foreign_keys=[vehicle_id],
+                                    backref=db.backref("vehicle_favorites_to", lazy="select"))
+
+    def __repr__(self):
+        return (f'<User {self.user_id} has vehicle '
+                f'{self.vehicle_id} as favorite vehicle>')
+
+    def serialize(self):
+        return {"id": self.id,
+                "user_id": self.user_id,
+                "vehicle_id": self.vehicle_id}
