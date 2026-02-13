@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, Users, Posts, Comments, Medias, Followers, Characters, CharacterFavorites, Planets, PlanetFavorites, Vehicles, VehicleFavorites
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
 
 api = Blueprint('api', __name__)
 
@@ -22,31 +22,51 @@ def login():
     if not row:
         response_body["message"] = "Bad username or password"
         return response_body, 401
+    user = row.serialize()
+    claims = {"user_id": user["id"],
+              "is_active": user["is_active"]}
     response_body["message"] = "User logged, ok"
-    response_body["access_token"] = create_access_token(identity=email)
+    response_body["access_token"] = create_access_token(identity=email, additional_claims=claims)
+    response_body["results"] = user
     return response_body, 200
 
-@api.route('/users', methods=['GET', 'POST'])
-@jwt_required
-def users():
+
+@api.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    # Access the identity of the current user with get_jwt_identity
+    current_user = get_jwt_identity()
+    additional_claims = get_jwt()
+    print(current_user, flush=True)
+    print(additional_claims, flush=True)
+    return jsonify(logged_in_as=current_user), 200
+
+
+
+@api.route('/users', methods=['POST'])
+def create_users():
     response_body = {}
-    if request.method == 'GET':
-        rows = db.session.execute(db.select(Users)).scalars().all()
-        results = [row.serialize() for row in rows]
-        response_body['results'] = results
-        response_body['message'] = 'Listado de Usuarios'
-        return response_body, 200
-    if request.method == 'POST':
-        data = request.json
-        row = Users(email=data.get('email'), password=data.get('password'), is_active=data.get('is_active', True), first_name=data.get('first_name'), last_name=data.get('last_name'))
-        db.session.add(row)
-        db.session.commit()
-        response_body['results'] = row.serialize()
-        response_body['message'] = 'Usuario creado'
-        return response_body, 201
+    data = request.json
+    row = Users(email=data.get('email'), password=data.get('password'), is_active=data.get('is_active', True), first_name=data.get('first_name'), last_name=data.get('last_name'))
+    db.session.add(row)
+    db.session.commit()
+    response_body['results'] = row.serialize()
+    response_body['message'] = 'Usuario creado'
+    return response_body, 201
+
+@api.route('/users', methods=['GET'])
+@jwt_required()
+def get_users():
+    response_body = {}
+    rows = db.session.execute(db.select(Users)).scalars().all()
+    results = [row.serialize() for row in rows]
+    response_body['results'] = results
+    response_body['message'] = 'Listado de Usuarios'
+    return response_body, 200
+    
 
 @api.route('/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
-@jwt_required
+@jwt_required()
 def user(user_id):
     response_body = {}
     if request.method == 'GET':
@@ -92,7 +112,7 @@ def user(user_id):
         return response_body, 200
 
 @api.route('/users/favorites', methods=['GET'])
-@jwt_required
+@jwt_required()
 def user_favorites():
     response_body = {}
     current_user_record = db.session.execute(db.select(Users).where(Users.id == current_user_id)).scalar()
@@ -140,7 +160,7 @@ def user_favorites():
     return response_body, 200
 
 @api.route('/posts', methods=['GET', 'POST'])
-@jwt_required
+@jwt_required()
 def posts():
     response_body = {}
     if request.method == 'GET':
@@ -163,7 +183,7 @@ def posts():
         return response_body, 201
 
 @api.route('/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
-@jwt_required
+@jwt_required()
 def post(post_id):
     response_body = {}
     if request.method == 'GET':
@@ -195,7 +215,7 @@ def post(post_id):
         return response_body, 200
 
 @api.route('/comments', methods=['GET', 'POST'])
-@jwt_required
+@jwt_required()
 def comments():
     response_body = {}
     if request.method == 'GET':
@@ -222,7 +242,7 @@ def comments():
         return response_body, 201
 
 @api.route('/comments/<int:comment_id>', methods=['DELETE'])
-@jwt_required
+@jwt_required()
 def comment(comment_id):
     response_body = {}
     row = db.session.execute(db.select(Comments).where(Comments.id == comment_id)).scalar()
@@ -235,7 +255,7 @@ def comment(comment_id):
     return response_body, 200
 
 @api.route('/followers', methods=['GET'])
-@jwt_required
+@jwt_required()
 def followers():
     response_body = {}
     rows = db.session.execute(db.select(Followers)).scalars().all()
@@ -245,7 +265,7 @@ def followers():
     return response_body, 200
 
 @api.route('/followers/<int:user_id>', methods=['POST', 'DELETE'])
-@jwt_required
+@jwt_required()
 def follow(user_id):
     response_body = {}
     if request.method == 'POST':
@@ -266,7 +286,7 @@ def follow(user_id):
         return response_body, 200
 
 @api.route('/people', methods=['GET', 'POST'])
-@jwt_required
+@jwt_required()
 def people():
     response_body = {}
     if request.method == 'GET':
@@ -285,7 +305,7 @@ def people():
         return response_body, 201
 
 @api.route('/people/<int:people_id>', methods=['GET', 'PUT', 'DELETE'])
-@jwt_required
+@jwt_required()
 def person(people_id):
     response_body = {}
     if request.method == 'GET':
@@ -317,7 +337,7 @@ def person(people_id):
         return response_body, 200
 
 @api.route('/planets', methods=['GET', 'POST'])
-@jwt_required
+@jwt_required()
 def planets():
     response_body = {}
     if request.method == 'GET':
@@ -336,7 +356,7 @@ def planets():
         return response_body, 201
 
 @api.route('/planets/<int:planet_id>', methods=['GET', 'PUT', 'DELETE'])
-@jwt_required
+@jwt_required()
 def planet(planet_id):
     response_body = {}
     if request.method == 'GET':
@@ -368,7 +388,7 @@ def planet(planet_id):
         return response_body, 200
 
 @api.route('/favorite/people/<int:people_id>', methods=['POST', 'DELETE'])
-@jwt_required
+@jwt_required()
 def handle_people_fav(people_id):
     response_body = {}
     if request.method == 'POST':
@@ -392,7 +412,7 @@ def handle_people_fav(people_id):
         return response_body, 200
 
 @api.route('/favorite/planet/<int:planet_id>', methods=['POST', 'DELETE'])
-@jwt_required
+@jwt_required()
 def handle_planet_fav(planet_id):
     response_body = {}
     if request.method == 'POST':
@@ -416,7 +436,7 @@ def handle_planet_fav(planet_id):
         return response_body, 200
 
 @api.route('/vehicles', methods=['GET', 'POST'])
-@jwt_required
+@jwt_required()
 def vehicles():
     response_body = {}
     if request.method == 'GET':
@@ -443,7 +463,7 @@ def vehicles():
         return response_body, 201
 
 @api.route('/vehicles/<int:vehicle_id>', methods=['GET', 'PUT', 'DELETE'])
-@jwt_required
+@jwt_required()
 def vehicle(vehicle_id):
     response_body = {}
     if request.method == 'GET':
@@ -475,7 +495,7 @@ def vehicle(vehicle_id):
         return response_body, 200
 
 @api.route('/favorite/vehicle/<int:vehicle_id>', methods=['POST', 'DELETE'])
-@jwt_required
+@jwt_required()
 def handle_vehicle_fav(vehicle_id):
     response_body = {}
     if request.method == 'POST':
