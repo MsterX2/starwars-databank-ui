@@ -51,21 +51,21 @@ export const Contact = ({ id, name, address, phone, email, setEditValue }) => {
 
     return (
         <li className="list-group-item contact-item" onClick={handleClick}>
-            <div className="userData">
+            <div className="user-data">
                 <img
-                    className="userImage"
+                    className="user-image"
                     src={image}
-                    alt="userImage"
+                    alt="user-image"
                 />
-                <div className="userDetails">
+                <div className="user-details">
                     <span><b>{name}</b></span>
-                    <span className="userInfo"><i className="fas fa-map-marker-alt"></i><span>{address}</span></span>
-                    <span className="userInfo"><i className="fas fa-phone"></i><span>{phone}</span></span>
-                    <span className="userInfo"><i className="fas fa-envelope"></i><span>{email}</span></span>
+                    <span className="user-info"><i className="fas fa-map-marker-alt"></i><span>{address}</span></span>
+                    <span className="user-info"><i className="fas fa-phone"></i><span>{phone}</span></span>
+                    <span className="user-info"><i className="fas fa-envelope"></i><span>{email}</span></span>
                 </div>
             </div>
 
-            <div className="actionButtons">
+            <div className="action-buttons">
                 <span
                     onClick={handleEdit}
                     className="btn btn-primary btn-sm"

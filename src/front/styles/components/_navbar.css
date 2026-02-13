@@ -1,0 +1,51 @@
+.star-wars-navbar {
+    background: var(--gradient-navbar) !important;
+    border-bottom: 2px solid var(--sw-yellow);
+    box-shadow: var(--shadow-navbar);
+    backdrop-filter: blur(10px);
+}
+
+.star-wars-navbar .navbar-brand {
+    color: var(--sw-yellow) !important;
+    font-family: var(--font-orbitron);
+    letter-spacing: 0.1em;
+    text-shadow: var(--glow-yellow);
+    transition: var(--transition-default);
+}
+
+.star-wars-navbar .navbar-brand:hover {
+    text-shadow: var(--glow-yellow-medium), var(--glow-yellow-large);
+    transform: scale(1.05);
+}
+
+.star-wars-navbar .nav-link {
+    color: var(--sw-cyan) !important;
+    font-family: var(--font-orbitron);
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-default);
+    position: relative;
+}
+
+.star-wars-navbar .nav-link:hover {
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--sw-yellow) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+.star-wars-navbar .nav-link.active {
+    background: linear-gradient(135deg, rgba(255, 232, 31, 0.2), rgba(0, 212, 255, 0.2));
+    color: var(--sw-yellow) !important;
+    border: 1px solid var(--sw-yellow);
+    box-shadow: 0 0 20px rgba(255, 232, 31, 0.4);
+}
+
+.star-wars-navbar .navbar-toggler {
+    border-color: var(--sw-yellow) !important;
+}
+
+.star-wars-navbar .navbar-toggler-icon {
+    filter: brightness(0) saturate(100%) invert(85%) sepia(73%) saturate(1352%) hue-rotate(359deg) brightness(104%) contrast(102%);
+}

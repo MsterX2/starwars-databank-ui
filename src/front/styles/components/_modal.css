@@ -1,0 +1,33 @@
+.star-wars-modal {
+    background: var(--gradient-card) !important;
+    border: 2px solid var(--sw-yellow) !important;
+    border-radius: var(--border-radius-lg) !important;
+    box-shadow: var(--shadow-modal);
+}
+
+.star-wars-modal .modal-header {
+    border-bottom: 2px solid rgba(0, 212, 255, 0.3) !important;
+    background: var(--gradient-dark);
+}
+
+.star-wars-modal .modal-title {
+    color: var(--sw-yellow) !important;
+    font-family: var(--font-orbitron);
+    text-shadow: var(--glow-yellow);
+}
+
+.star-wars-modal .modal-body {
+    background: var(--gradient-card);
+}
+
+.star-wars-modal .modal-footer {
+    border-top: 2px solid rgba(0, 212, 255, 0.3) !important;
+    background: var(--gradient-blue-dark);
+}
+
+.star-wars-modal .form-label {
+    color: var(--sw-cyan);
+    font-family: var(--font-orbitron);
+    text-shadow: 0 0 5px var(--sw-cyan);
+    margin-bottom: 0.5rem;
+}

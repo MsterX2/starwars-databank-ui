@@ -18,11 +18,13 @@ export const Layout = () => {
     return (
         <ScrollToTop>
             <searchContext.Provider value={[searchTerm, setSearchTerm]}>
-                <Navbar />
-                <main>
-                    <Outlet />
-                </main>
-                <Footer />
+                <div className="app-container">
+                    <Navbar />
+                    <main className="app-main">
+                        <Outlet />
+                    </main>
+                    <Footer />
+                </div>
             </searchContext.Provider>
         </ScrollToTop>
     )

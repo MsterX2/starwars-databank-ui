@@ -1,0 +1,75 @@
+.star-wars-card {
+    background: var(--gradient-card);
+    border: 2px solid var(--sw-yellow) !important;
+    border-radius: var(--border-radius-lg) !important;
+    overflow: hidden;
+    transition: var(--transition-default);
+    box-shadow: var(--shadow-card);
+    position: relative;
+}
+
+.star-wars-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--sw-cyan) !important;
+    box-shadow: var(--shadow-card-hover);
+}
+
+.star-wars-card .card-img-top {
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 3px solid var(--sw-yellow);
+    transition: var(--transition-default);
+}
+
+.star-wars-card:hover .card-img-top {
+    filter: brightness(1.2) contrast(1.1);
+}
+
+.star-wars-card .card-body {
+    background: var(--gradient-card-reverse);
+    padding: 1.5rem;
+}
+
+.star-wars-card .card-title {
+    color: var(--sw-yellow);
+    font-family: var(--font-orbitron);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    text-shadow: var(--glow-yellow);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.star-wars-card .list-group {
+    background: transparent !important;
+}
+
+.star-wars-card .list-group-item {
+    background: rgba(0, 212, 255, 0.05) !important;
+    border: 1px solid rgba(0, 212, 255, 0.2) !important;
+    color: var(--sw-cyan) !important;
+    font-family: var(--font-roboto);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--border-radius-sm) !important;
+    transition: var(--transition-default);
+}
+
+.star-wars-card .list-group-item:hover {
+    background: rgba(0, 212, 255, 0.15) !important;
+    border-color: var(--sw-cyan) !important;
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+.star-wars-card .list-group-item i {
+    color: var(--sw-yellow);
+    font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+    .star-wars-card .card-img-top {
+        height: 200px;
+    }
+}

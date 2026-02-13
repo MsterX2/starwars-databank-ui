@@ -1,0 +1,32 @@
+.star-wars-input {
+    background: rgba(0, 212, 255, 0.05) !important;
+    border: 2px solid rgba(0, 212, 255, 0.3) !important;
+    color: var(--sw-cyan) !important;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-default);
+}
+
+.star-wars-input:focus {
+    background: rgba(0, 212, 255, 0.1) !important;
+    border-color: var(--sw-cyan) !important;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3) !important;
+    color: var(--sw-cyan) !important;
+}
+
+.star-wars-input::placeholder {
+    color: rgba(0, 212, 255, 0.5);
+}
+
+.auth-body .star-wars-input {
+    font-family: var(--font-roboto);
+    padding: 0.75rem 1rem;
+}
+
+.auth-label {
+    color: var(--sw-cyan);
+    font-family: var(--font-orbitron);
+    text-shadow: 0 0 5px var(--sw-cyan);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+}

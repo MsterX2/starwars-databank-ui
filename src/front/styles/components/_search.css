@@ -1,0 +1,73 @@
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    color: var(--sw-yellow);
+    z-index: 10;
+    pointer-events: none;
+    text-shadow: var(--glow-yellow);
+}
+
+.star-wars-search {
+    background: rgba(0, 212, 255, 0.05) !important;
+    border: 2px solid rgba(0, 212, 255, 0.3) !important;
+    color: var(--sw-cyan) !important;
+    border-radius: var(--border-radius-full) !important;
+    padding: 0.5rem 1rem 0.5rem 2.5rem !important;
+    min-width: 250px;
+    font-family: var(--font-orbitron) !important;
+    transition: var(--transition-default);
+}
+
+.star-wars-search:focus {
+    background: rgba(0, 212, 255, 0.1) !important;
+    border-color: var(--sw-cyan) !important;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4) !important;
+    color: var(--sw-cyan) !important;
+    outline: none;
+}
+
+.star-wars-search::placeholder {
+    color: rgba(0, 212, 255, 0.5);
+    font-family: var(--font-orbitron);
+}
+
+.no-results {
+    padding: 4rem 2rem;
+    color: var(--sw-cyan);
+    font-family: var(--font-orbitron);
+}
+
+.no-results i {
+    color: var(--sw-yellow);
+    text-shadow: var(--glow-yellow-medium);
+    opacity: 0.6;
+}
+
+.no-results h3 {
+    color: var(--sw-yellow);
+    text-shadow: var(--glow-yellow);
+    margin-top: 1rem;
+}
+
+.no-results p {
+    color: var(--sw-cyan);
+    text-shadow: 0 0 5px var(--sw-cyan);
+    opacity: 0.8;
+}
+
+@media (max-width: 992px) {
+    .search-container {
+        margin-top: 1rem;
+        width: 100%;
+    }
+
+    .star-wars-search {
+        width: 100%;
+    }
+}

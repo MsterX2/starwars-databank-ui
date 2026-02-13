@@ -1,0 +1,84 @@
+.star-wars-button {
+    background: var(--gradient-yellow) !important;
+    border: 2px solid var(--sw-yellow) !important;
+    color: var(--sw-dark) !important;
+    font-family: var(--font-orbitron) !important;
+    letter-spacing: 0.05em;
+    box-shadow: var(--shadow-button-yellow);
+    transition: var(--transition-default);
+}
+
+.star-wars-button:hover {
+    background: var(--gradient-cyan) !important;
+    border-color: var(--sw-cyan) !important;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.star-wars-button-secondary {
+    background: var(--gradient-cyan-transparent-light) !important;
+    border: 2px solid var(--sw-cyan) !important;
+    color: var(--sw-white) !important;
+    font-family: var(--font-orbitron) !important;
+    letter-spacing: 0.05em;
+    box-shadow: var(--shadow-button-cyan);
+    transition: var(--transition-default);
+}
+
+.star-wars-button-secondary:hover {
+    background: var(--gradient-cyan-transparent) !important;
+    border-color: var(--sw-cyan) !important;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.star-wars-button-reset {
+    background: var(--gradient-yellow-transparent) !important;
+    border: 2px solid rgba(255, 232, 31, 0.5) !important;
+    color: var(--sw-yellow) !important;
+    font-family: var(--font-orbitron) !important;
+    letter-spacing: 0.05em;
+    box-shadow: 0 0 15px rgba(255, 232, 31, 0.3);
+    transition: var(--transition-default);
+    padding: 0.5rem 1rem;
+    min-width: 50px;
+}
+
+.star-wars-button-reset:hover {
+    background: var(--gradient-yellow-transparent-medium) !important;
+    border-color: var(--sw-yellow) !important;
+    box-shadow: 0 0 25px rgba(255, 232, 31, 0.6);
+    transform: rotate(180deg);
+    color: var(--sw-yellow) !important;
+}
+
+.star-wars-button-reset:active {
+    transform: rotate(180deg) scale(0.95);
+}
+
+.star-wars-back-button {
+    background: var(--gradient-cyan-transparent) !important;
+    border: 2px solid var(--sw-cyan) !important;
+    color: var(--sw-white) !important;
+    font-family: var(--font-orbitron);
+    letter-spacing: 0.05em;
+    box-shadow: var(--shadow-button-cyan);
+    transition: var(--transition-default);
+}
+
+.star-wars-back-button:hover {
+    background: var(--gradient-yellow) !important;
+    border-color: var(--sw-yellow) !important;
+    color: var(--sw-dark) !important;
+    box-shadow: 0 0 30px rgba(255, 232, 31, 0.6);
+    transform: translateX(-5px);
+}
+
+.action-buttons .btn {
+    transition: var(--transition-default);
+}
+
+.action-buttons .btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px currentColor;
+}
