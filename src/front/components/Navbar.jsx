@@ -4,12 +4,21 @@ import { searchContext } from "../pages/Layout";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Navbar = ({ activeSection, onSectionChange }) => {
+	const navigate = useNavigate();
 	const handleClick = (e, section) => {
 		e.preventDefault();
 		onSectionChange(section);
 	};
 	const [searchTerm, setSearchTerm] = useContext(searchContext);
-	const { store } = useGlobalReducer()
+	const { store, dispatch } = useGlobalReducer()
+
+	const handleLogout = () => {
+		localStorage.removeItem("access_token");
+		dispatch({ type: "LOGOUT" });
+		dispatch({ type: "HANDLE_TOKEN", payload: "" })
+		localStorage.removeItem("access_token")
+		navigate("/");
+	};
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark star-wars-navbar sticky-top">
@@ -98,7 +107,7 @@ export const Navbar = ({ activeSection, onSectionChange }) => {
 						}
 					</ul>
 
-					<div className="d-flex">
+					<div className="d-flex align-items-center gap-2">
 						<div className="search-container">
 							<i className="fas fa-search search-icon"></i>
 							<input
@@ -109,6 +118,42 @@ export const Navbar = ({ activeSection, onSectionChange }) => {
 								onChange={(e) => setSearchTerm(e.target.value)}
 							/>
 						</div>
+
+						{store.isAuthenticated ? (
+							<div className="auth-buttons-container d-flex align-items-center gap-2">
+								<span className="navbar-user-name d-none d-md-inline">
+									<i className="fas fa-jedi me-1"></i>
+									{store.user?.first_name || store.user?.email || 'User'}
+								</span>
+								<button
+									className="btn star-wars-button-secondary navbar-auth-btn"
+									onClick={handleLogout}
+									title="Logout"
+								>
+									<i className="fas fa-sign-out-alt"></i>
+									<span className="d-none d-lg-inline ms-1">Logout</span>
+								</button>
+							</div>
+						) : (
+							<div className="auth-buttons-container d-flex align-items-center gap-2">
+								<Link
+									to="/login"
+									className="btn star-wars-button-secondary navbar-auth-btn"
+									title="Login"
+								>
+									<i className="fas fa-user"></i>
+									<span className="d-none d-lg-inline ms-1">Login</span>
+								</Link>
+								<Link
+									to="/login"
+									className="btn star-wars-button navbar-auth-btn"
+									title="Sign Up"
+								>
+									<i className="fas fa-user-plus"></i>
+									<span className="d-none d-lg-inline ms-1">Sign Up</span>
+								</Link>
+							</div>
+						)}
 					</div>
 
 				</div>

@@ -49,3 +49,66 @@
 .star-wars-navbar .navbar-toggler-icon {
     filter: brightness(0) saturate(100%) invert(85%) sepia(73%) saturate(1352%) hue-rotate(359deg) brightness(104%) contrast(102%);
 }
+
+.auth-buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-user-name {
+    color: var(--sw-cyan);
+    font-family: var(--font-orbitron);
+    font-size: 0.85rem;
+    text-shadow: var(--glow-cyan);
+    white-space: nowrap;
+}
+
+.navbar-auth-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+}
+
+.navbar-auth-btn i {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 991px) {
+    .auth-buttons-container {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid rgba(0, 212, 255, 0.2);
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .navbar-user-name {
+        font-size: 0.8rem;
+    }
+
+    .navbar-auth-btn {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .auth-buttons-container {
+        justify-content: center;
+        gap: 0.4rem;
+    }
+
+    .navbar-auth-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .navbar-auth-btn i {
+        font-size: 0.85rem;
+    }
+}
