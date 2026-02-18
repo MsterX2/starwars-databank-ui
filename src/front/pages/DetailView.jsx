@@ -2,12 +2,14 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { fetchDetail, toggleLike } from '../starWarsActions';
 import { useStarWarsContext } from '../hooks/useStarWarsContext';
+import useGlobalReducer from '../hooks/useGlobalReducer.jsx';
 
 export const DetailView = () => {
     const { id } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
     const { state, dispatch } = useStarWarsContext();
+    const { store } = useGlobalReducer();
 
     const { detail, likes, loading } = state;
     const { endpoint, image, title } = location.state;
@@ -34,12 +36,14 @@ export const DetailView = () => {
                         <div className="col-md-5 position-relative">
                             <img src={image} alt={title} className="detail-image" />
 
-                            <button
-                                className={`like-button ${isLiked ? "liked" : ""}`}
-                                onClick={() => toggleLike(dispatch, id)}
-                            >
-                                <i className="fas fa-heart"></i>
-                            </button>
+                            {store.isAuthenticated && (
+                                <button
+                                    className={`like-button ${isLiked ? "liked" : ""}`}
+                                    onClick={() => toggleLike(dispatch, id)}
+                                >
+                                    <i className="fas fa-heart"></i>
+                                </button>
+                            )}
                         </div>
 
                         <div className="col-md-7">

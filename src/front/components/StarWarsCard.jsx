@@ -1,12 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStarWarsContext } from '../hooks/useStarWarsContext.jsx';
+import useGlobalReducer from '../hooks/useGlobalReducer.jsx';
 const images = import.meta.glob("../assets/img/**/*.jpg", { eager: true })
 import notFound from "../assets/img/big-placeholder.jpg"
 
 
 export const StarWarsCard = ({ item, type }) => {
     const { state, dispatch } = useStarWarsContext();
+    const { store } = useGlobalReducer();
     const image = images[`../assets/img/${type}/${item.uid}.jpg`]?.default;
     const navigate = useNavigate();
 
@@ -31,12 +33,14 @@ export const StarWarsCard = ({ item, type }) => {
             >
                 <img src={image || notFound} className="card-img-top" alt={item.name} />
 
-                <button
-                    className={`like-button ${isLiked ? 'liked' : ''}`}
-                    onClick={handleLikeToggle}
-                >
-                    <i className={`fas fa-heart`}></i>
-                </button>
+                {store.isAuthenticated && (
+                    <button
+                        className={`like-button ${isLiked ? 'liked' : ''}`}
+                        onClick={handleLikeToggle}
+                    >
+                        <i className={`fas fa-heart`}></i>
+                    </button>
+                )}
 
                 <div className="card-body">
                     <h5 className="card-title">
