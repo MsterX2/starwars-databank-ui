@@ -1,84 +1,102 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useGlobalReducer from '../../hooks/useGlobalReducer.jsx';
 import { signup } from '../../action.js';
 
 export const SignupForm = () => {
   const { dispatch } = useGlobalReducer();
   const [emailAddress, setEmailAddress] = useState('');
+  const [userFirstName, setUserFirstName] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [confirmUserPassword, setConfirmUserPassword] = useState('');
   const [arePasswordsVisible, setArePasswordsVisible] = useState(false);
-  const [isActive, setIsActive] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSignupSubmit = (event) => {
+  const handleSignupSubmit = async (event) => {
     event.preventDefault();
-    signup(dispatch, {
+    if (userPassword !== confirmUserPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    const dataToSend = {
       email: emailAddress,
+      first_name: userFirstName,
       password: userPassword,
-      isActive: isActive
-    });
+      is_active: true
+    };
+    const result = await signup(dispatch, dataToSend);
+    if (!result) {
+      resetSignupForm();
+      return;
+    }
+    localStorage.setItem("access_token", result.access_token)
+    dispatch({
+      type: "HANDLE_TOKEN",
+      payload: result.access_token
+    })
+    navigate("/dashboard");
   };
 
   const resetSignupForm = () => {
     setEmailAddress('');
+    setUserFirstName('');
     setUserPassword('');
     setConfirmUserPassword('');
     setArePasswordsVisible(false);
-    setIsActive(false);
   };
 
   return (
     <form onSubmit={handleSignupSubmit}>
-      <input
-        type="email"
-        className="form-control star-wars-input mb-3"
-        placeholder="Email Address"
-        value={emailAddress}
-        onChange={(event) => setEmailAddress(event.target.value)}
-        required
-      />
-
-      <input
-        type={arePasswordsVisible ? 'text' : 'password'}
-        className="form-control star-wars-input mb-3"
-        placeholder="Password"
-        value={userPassword}
-        onChange={(event) => setUserPassword(event.target.value)}
-        required
-      />
-
-      <input
-        type={arePasswordsVisible ? 'text' : 'password'}
-        className="form-control star-wars-input mb-3"
-        placeholder="Confirm Password"
-        value={confirmUserPassword}
-        onChange={(event) => setConfirmUserPassword(event.target.value)}
-        required
-      />
-
-      <div className="star-wars-checkbox-wrapper mb-3">
+      <div className="mb-4">
+        <label className="form-label auth-label">Email Address</label>
         <input
-          type="checkbox"
-          id="is-active"
-          className="star-wars-checkbox"
-          checked={isActive}
-          onChange={(event) => setIsActive(event.target.checked)}
+          type="email"
+          className="form-control star-wars-input"
+          value={emailAddress}
+          onChange={(event) => setEmailAddress(event.target.value)}
+          required
         />
-        <label htmlFor="is-active" className="star-wars-checkbox-label">
-          <span className="checkbox-box">
-            <i className="fas fa-check checkbox-check"></i>
-          </span>
-          <span className="checkbox-text">Active Account</span>
-        </label>
       </div>
 
-      <button
-        type="button"
-        className="btn btn-link auth-link mb-3"
-        onClick={() => setArePasswordsVisible(!arePasswordsVisible)}
-      >
-        {arePasswordsVisible ? 'Hide' : 'Show'} Passwords
-      </button>
+      <div className="mb-4">
+        <label className="form-label auth-label">First Name</label>
+        <input
+          type="text"
+          className="form-control star-wars-input"
+          value={userFirstName}
+          onChange={(event) => setUserFirstName(event.target.value)}
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="form-label auth-label">Password</label>
+        <input
+          type={arePasswordsVisible ? 'text' : 'password'}
+          className="form-control star-wars-input"
+          value={userPassword}
+          onChange={(event) => setUserPassword(event.target.value)}
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="form-label auth-label">Confirm Password</label>
+        <input
+          type={arePasswordsVisible ? 'text' : 'password'}
+          className="form-control star-wars-input"
+          value={confirmUserPassword}
+          onChange={(event) => setConfirmUserPassword(event.target.value)}
+          required
+        />
+        <button
+          type="button"
+          className="btn btn-link auth-link"
+          onClick={() => setArePasswordsVisible(!arePasswordsVisible)}
+        >
+          {arePasswordsVisible ? 'Hide' : 'Show'} Passwords
+        </button>
+      </div>
 
       <div className="d-flex gap-2">
         <button type="submit" className="btn star-wars-button flex-fill">

@@ -88,20 +88,21 @@ export const login = async (dispatch, credentials) => {
     return response.data
 };
 
-export const signup = (dispatch, formData) => {
-    const mockUser = {
-        id: Date.now(),
+export const signup = async (dispatch, formData) => {
+    const url = `${host}/api/users`
+    const newUser = {
         email: formData.email,
-        username: formData.email.split('@')[0],
-        isActive: formData.isActive || false
+        first_name: formData.first_name,
+        password: formData.password,
+        is_active: formData.is_active
     };
-
+    const response = await apiRequest(url, "POST", { body: newUser });
+    if (!response.ok) return false;
     dispatch({
         type: "SIGNUP",
-        payload: mockUser
+        payload: { ...response.data.results }
     });
-
-    return { ok: true, data: mockUser };
+    return response.data
 };
 
 export const logout = (dispatch) => {

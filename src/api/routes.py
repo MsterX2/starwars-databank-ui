@@ -49,11 +49,19 @@ def protected():
 def create_users():
     response_body = {}
     data = request.json
+    existing_user = db.session.execute(db.select(Users).where(Users.email == data.get('email'))).scalar()
+    if existing_user:
+        response_body['message'] = 'Email already exists'
+        return response_body, 400
     row = Users(email=data.get('email'), password=data.get('password'), is_active=data.get('is_active', True), first_name=data.get('first_name'), last_name=data.get('last_name'))
     db.session.add(row)
     db.session.commit()
-    response_body['results'] = row.serialize()
+    user = row.serialize()
+    claims = {"user_id": user["id"],
+              "is_active": user["is_active"]}
     response_body['message'] = 'Usuario creado'
+    response_body['access_token'] = create_access_token(identity=data.get('email'), additional_claims=claims)
+    response_body['results'] = user
     return response_body, 201
 
 @api.route('/users', methods=['GET'])
